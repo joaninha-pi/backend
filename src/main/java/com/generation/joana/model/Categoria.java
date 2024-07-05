@@ -22,4 +22,28 @@ public class Categoria {
 	
 	@Size(min = 10, max = 500, message = "A descrição deve conter no mínimo 10 e no máximo 500 caracteres")
 	private String descricao;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 }
