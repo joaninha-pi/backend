@@ -20,7 +20,7 @@ public class Categoria {
 	@Size(min = 3, max = 255, message = "O nome deve conter no mínimo 03 e no máximo 255 caracteres")
 	private String nome;
 	
-	@Size(min = 10, max = 500, message = "A descrição deve conter no mínimo 10 e no máximo 500 caracteres")
+	@Size(max = 500, message = "A descrição deve conter no máximo 500 caracteres")
 	private String descricao;
 
 	public Long getId() {
