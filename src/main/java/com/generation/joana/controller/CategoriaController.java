@@ -31,6 +31,11 @@ public class CategoriaController {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
+	@GetMapping
+	public ResponseEntity<List<Categoria>> getByAll() {
+		return ResponseEntity.ok(categoriaRepository.findAll());
+	}
+	
 	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<Categoria>> getByName(@PathVariable String nome){
 		return ResponseEntity.ok(categoriaRepository.findAllByNomeContainingIgnoreCase(nome));
