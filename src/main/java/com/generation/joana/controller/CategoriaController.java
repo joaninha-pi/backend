@@ -32,7 +32,7 @@ public class CategoriaController {
 	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping
-	public ResponseEntity<List<Categoria>> getByAll() {
+	public ResponseEntity<List<Categoria>> getAll() {
 		return ResponseEntity.ok(categoriaRepository.findAll());
 	}
 	
