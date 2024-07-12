@@ -1,5 +1,7 @@
 package com.generation.joana.model;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,8 +30,9 @@ public class Produto {
 	@NotNull(message = "O atributo quantidade é obrigatorio")
 	private Integer quantidade;
 	
+	@Digits (integer= 8, fraction= 2)
 	@NotNull(message = "O atributo preço é obrigatorio")
-	private float preco;
+	private BigDecimal preco;
 	
 	@NotBlank(message = "O atributo imagem é obrigatorio")
 	private String image;
@@ -65,11 +69,11 @@ public class Produto {
 		this.quantidade = quantidade;
 	}
 
-	public float getPreco() {
+	public BigDecimal getPreco() {
 		return preco;
 	}
 
-	public void setPreco(float preco) {
+	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
 
