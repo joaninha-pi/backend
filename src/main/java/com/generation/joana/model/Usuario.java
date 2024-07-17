@@ -24,7 +24,7 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "O atributo noem é obrigatorio")
+	@NotBlank(message = "O atributo nome é obrigatorio")
 	private String nome;
 	
 	@Email(message = "O email deve seguir o padrão '@dominio.com'")
