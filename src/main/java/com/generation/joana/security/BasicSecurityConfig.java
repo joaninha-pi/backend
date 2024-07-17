@@ -66,6 +66,7 @@ public class BasicSecurityConfig {
 	                .requestMatchers("/usuarios/cadastrar").permitAll()
 	                .requestMatchers("/error/**").permitAll()
 	                .requestMatchers(HttpMethod.OPTIONS).permitAll()
+	                .requestMatchers(HttpMethod.GET, "/produtos/**").permitAll()
 	                .anyRequest().authenticated())
 	        .authenticationProvider(authenticationProvider())
 	        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
