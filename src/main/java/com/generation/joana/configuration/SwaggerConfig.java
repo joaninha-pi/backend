@@ -25,13 +25,7 @@ public class SwaggerConfig {
 								.name("Generation Brasil")
 								.url("https://brazil.generation.org/"))
 						.contact(new Contact()
-								.name("Beazinat Gonçalves de Abreu Rodrigues\r\n"
-										+ "Gabriel Camargo Braz de Almeida\r\n"
-										+ "João Victor Oliveira Silva\r\n"
-										+ "Lucas Silva de Vasconcelos Costa\r\n"
-										+ "Ney Robson Nobre Lima Junior\r\n"
-										+ "Renata de Aguiar Rainho\r\n"
-										+ "Rodrigo Nascimento Araujo")
+								.name("Time Joana")
 								.url("https://github.com/joaninha-pi")
 								.email("aradojoaninha@gmail.com")))
 				.externalDocs(new ExternalDocumentation()
