@@ -15,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -36,6 +37,9 @@ public class Usuario {
 	@NotBlank(message = "o atributo senha é obrigatorio")
 	@Size(min = 8, message = "O atributo deve conter no minimo 8 caracteres")
 	private String senha;
+	
+	@NotNull
+	private int vendedor;
 	
 	private String foto;
 	
@@ -90,5 +94,15 @@ public class Usuario {
 	public void setProduto(List<Produto> produto) {
 		this.produto = produto;
 	}
+
+	public int getVendedor() {
+		return vendedor;
+	}
+
+	public void setVendedor(int vendedor) {
+		this.vendedor = vendedor;
+	}
+	
+	
 	
 }
