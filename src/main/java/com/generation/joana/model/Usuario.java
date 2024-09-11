@@ -32,7 +32,7 @@ public class Usuario {
 	@Schema(example = "email@email.com.br")
 	@Email(message = "O email deve seguir o padrão '@dominio.com'")
 	@NotBlank(message = "O atributo email é obrigatorio")
-	private String usuario;
+	private String email;
 	
 	@NotBlank(message = "o atributo senha é obrigatorio")
 	@Size(min = 8, message = "O atributo deve conter no minimo 8 caracteres")
@@ -63,12 +63,12 @@ public class Usuario {
 		this.nome = nome;
 	}
 
-	public String getUsuario() {
-		return usuario;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setEmail(String usuario) {
+		this.email = usuario;
 	}
 
 	public String getSenha() {
@@ -102,7 +102,5 @@ public class Usuario {
 	public void setVendedor(int vendedor) {
 		this.vendedor = vendedor;
 	}
-	
-	
-	
+
 }

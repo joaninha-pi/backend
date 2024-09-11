@@ -1,6 +1,7 @@
 package com.generation.joana.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -48,6 +50,14 @@ public class Produto {
 	@ManyToOne
 	@JsonIgnoreProperties("produto")
 	private Usuario usuario;
+
+	@ManyToOne
+	@JsonIgnoreProperties("tipo_produtor")
+	private EstagioProducao estagioProducao;
+
+	@OneToMany
+	@JsonIgnoreProperties("produto")
+	private List<ImagemProduto> imagem;
 
 	public Long getId() {
 		return id;
