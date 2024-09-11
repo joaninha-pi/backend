@@ -9,7 +9,5 @@ import com.generation.joana.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
-	public Optional<Usuario> findByUsuario(String usuario);
-
+    Optional<Usuario> findByEmail(String email);
 }
