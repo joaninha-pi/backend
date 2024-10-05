@@ -63,7 +63,7 @@ Antes de começar, você vai precisar:
 
 ---
 
-## 👥 **Contribuidores**
+## 👥🐞 **Joaners**
 
 Este projeto não seria possível sem a contribuição incrível de:
 
@@ -84,4 +84,4 @@ Se precisar de ajuda ou tiver sugestões, não hesite em abrir uma **issue** ou 
 
 ---
 
-✨ **Zele pelo planeta, hoje.** 🌱 💚
+✨ **Zele pelo planeta. Hoje.** 🌱 💚
