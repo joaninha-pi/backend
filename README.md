@@ -1,8 +1,4 @@
-Aqui está uma versão visualmente aprimorada do README para o projeto **Backend Joana**, com alguns toques de personalização inovadora:
-
----
-
-# 🌿🎉 **Projeto Backend Joana** 🎉🌿
+# 🌿🐞🎉 **Projeto Backend Joana** 🎉🐞🌿
 
 Seja muito bem-vindo ao **Backend do Joana**! Este projeto, desenvolvido com **Java 17** e **Spring Boot**, é pensado para promover a agricultura sustentável e pode ser rodado localmente ou acessado diretamente via deploy online!
 
