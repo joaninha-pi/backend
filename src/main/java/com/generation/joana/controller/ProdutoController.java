@@ -1,85 +1,66 @@
 package com.generation.joana.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import com.generation.joana.model.Produto;
-import com.generation.joana.repository.CategoriaRepository;
 import com.generation.joana.repository.ProdutoRepository;
 
-import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/produtos")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	
-	@Autowired
-	private CategoriaRepository categoriaRepository;
 
+	// Método para listar todos os produtos (disponível para todos os usuários)
 	@GetMapping
-	public ResponseEntity<List<Produto>> getAll() {
+	public ResponseEntity<List<Produto>> listarProdutos() {
 		return ResponseEntity.ok(produtoRepository.findAll());
 	}
-	
+
+	// Método para buscar um produto por ID (disponível para todos os usuários)
 	@GetMapping("/{id}")
-	public ResponseEntity<Produto> getById (@PathVariable Long id){
-		return produtoRepository.findById(id)
-				.map(resposta -> ResponseEntity.ok(resposta))
-				.orElse(ResponseEntity.notFound().build());
-	}
-	
-	@GetMapping("/nome/{nome}")
-	public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
-		return ResponseEntity.ok(produtoRepository.getAllByNomeContainingIgnoreCase(nome));
-	}
-	
-	@PostMapping
-	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
-		if(categoriaRepository.existsById(produto.getCategoria().getId()))
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(produtoRepository.save(produto));
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente.", null);
-	}
-	
-	@PutMapping
-	public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
-		if(produtoRepository.existsById(produto.getId())) {
-			if(categoriaRepository.existsById(produto.getCategoria().getId()))
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(produtoRepository.save(produto));
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente.", null);
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-	
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<Produto> buscarProdutoPorId(@PathVariable Long id) {
 		Optional<Produto> produto = produtoRepository.findById(id);
-		
-		if(produto.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		
-		produtoRepository.deleteById(id);
+		return produto.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
+	// Método para criar um novo produto (disponível apenas para vendedores e
+	// administradores)
+	@PostMapping
+	@PreAuthorize("hasRole('VENDEDOR') or hasRole('ADMINISTRADOR')")
+	public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
+	}
+
+	// Método para atualizar um produto (disponível apenas para vendedores e
+	// administradores)
+	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('VENDEDOR') or hasRole('ADMINISTRADOR')")
+	public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
+		if (!produtoRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		produto.setId(id);
+		return ResponseEntity.ok(produtoRepository.save(produto));
+	}
+
+	// Método para excluir um produto (disponível apenas para vendedores e
+	// administradores)
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('VENDEDOR') or hasRole('ADMINISTRADOR')")
+	public ResponseEntity<Void> excluirProduto(@PathVariable Long id) {
+		if (!produtoRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		produtoRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
 }

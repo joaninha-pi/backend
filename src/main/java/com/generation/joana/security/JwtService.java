@@ -48,7 +48,10 @@ public class JwtService {
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		final String role = extractRole(token); // Obtendo o role do token
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)
+				&& userDetails.getAuthorities().stream()
+						.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role)));
 	}
 
 	private String createToken(Map<String, Object> claims, String userName) {
@@ -59,8 +62,14 @@ public class JwtService {
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 	}
 
-	public String generateToken(String userName) {
+	public String generateToken(String userName, String role) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", role); // Adicionando o role aos claims
 		return createToken(claims, userName);
 	}
+
+	public String extractRole(String token) {
+		return extractClaim(token, claims -> claims.get("role").toString());
+	}
+
 }

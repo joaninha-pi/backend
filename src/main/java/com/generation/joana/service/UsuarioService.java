@@ -58,33 +58,26 @@ public class UsuarioService {
 
 	}
 
-	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
-
-		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getUsuario(),
-				usuarioLogin.get().getSenha());
-
+	public Optional<UsuarioLogin> autenticarUsuario(UsuarioLogin usuarioLogin) { // Remover Optional
+		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.getUsuario(), usuarioLogin.getSenha());
+	
 		Authentication authentication = authenticationManager.authenticate(credenciais);
-
+	
 		if (authentication.isAuthenticated()) {
-
-			Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioLogin.get().getUsuario());
-
+			Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioLogin.getUsuario());
+			
 			if (usuario.isPresent()) {
-
-				usuarioLogin.get().setId(usuario.get().getId());
-				usuarioLogin.get().setNome(usuario.get().getNome());
-				usuarioLogin.get().setFoto(usuario.get().getFoto());
-				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUsuario()));
-				usuarioLogin.get().setSenha("");
-
-				return usuarioLogin;
-
+				UsuarioLogin loginResponse = new UsuarioLogin();
+				loginResponse.setId(usuario.get().getId());
+				loginResponse.setNome(usuario.get().getNome());
+				loginResponse.setToken(gerarToken(usuarioLogin.getUsuario(), usuario.get().getTipoUsuario().toString()));
+				loginResponse.setSenha(""); // Limpa a senha para segurança
+				
+				return Optional.of(loginResponse);
 			}
-
 		}
-
+	
 		return Optional.empty();
-
 	}
 
 	private String criptografarSenha(String senha) {
@@ -95,8 +88,8 @@ public class UsuarioService {
 
 	}
 
-	private String gerarToken(String usuario) {
-		return "Bearer " + jwtService.generateToken(usuario);
+	private String gerarToken(String usuario, String role) {
+		return "Bearer " + jwtService.generateToken(usuario, role);
 	}
 
 }

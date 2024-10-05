@@ -1,16 +1,21 @@
 package com.generation.joana.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-
 import com.generation.joana.model.Produto;
 
-@Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-	
-	public List<Produto> getAllByNomeContainingIgnoreCase(@Param("nome") String nome);
+    
+    // Método personalizado para buscar produtos por nome (ou parte dele)
+    List<Produto> findAllByNomeContainingIgnoreCase(String nome);
 
+    // Método para buscar produtos dentro de um intervalo de preço
+    List<Produto> findByPrecoBetween(BigDecimal minPreco, BigDecimal maxPreco);
+
+    // Método para buscar produtos por categoria
+    List<Produto> findByCategoriaId(Long categoriaId);
+    
+    // Método para buscar produtos por vendedor (usuário)
+    List<Produto> findByUsuarioId(Long usuarioId);
 }

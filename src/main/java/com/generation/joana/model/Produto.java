@@ -1,10 +1,8 @@
 package com.generation.joana.model;
 
 import java.math.BigDecimal;
-import java.util.List;
-
+import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,106 +20,111 @@ import jakarta.validation.constraints.Size;
 @Table(name = "tb_produtos")
 public class Produto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@NotBlank(message = "O atributo nome é obrigatorio")
-	@Size(max = 255, message = "o atributo deve conter no maximo 255 caracteres")
-	private String nome;
-	
-	@NotNull(message = "O atributo quantidade é obrigatorio")
-	private Integer quantidade;
-	
-	@Digits(integer= 8, fraction= 2)
-	@NotNull(message = "O atributo preço é obrigatorio")
-	private BigDecimal preco;
-	
-	@NotBlank(message = "O atributo imagem é obrigatorio")
-	private String image;
-	
-	@NotBlank(message = "O atributo descrição é obrigatorio")
-	@Size(max = 500, message = "O atributo deve conter no maximo 500 caracteres")
-	private String descricao;
-	
-	@ManyToOne
-	@JsonIgnoreProperties("produto")
-	private Categoria categoria;
-	
-	@ManyToOne
-	@JsonIgnoreProperties("produto")
-	private Usuario usuario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JsonIgnoreProperties("tipo_produtor")
-	private EstagioProducao estagioProducao;
+    @NotBlank(message = "{nome.obrigatorio}")
+    @Size(max = 255, message = "{nome.tamanho}")
+    private String nome;
 
-	@OneToMany
-	@JsonIgnoreProperties("produto")
-	private List<ImagemProduto> imagem;
+    @NotNull(message = "{quantidade.obrigatorio}")
+    @Min(value = 1, message = "{quantidade.min}")
+    private Integer quantidade;
 
-	public Long getId() {
-		return id;
-	}
+    @Digits(integer = 8, fraction = 2)
+    @NotNull(message = "{preco.obrigatorio}")
+    private BigDecimal preco;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @NotBlank(message = "{imagem.obrigatorio}")
+    private String imagem;
 
-	public String getNome() {
-		return nome;
-	}
+    @NotBlank(message = "{descricao.obrigatorio}")
+    @Size(max = 500, message = "{descricao.tamanho}")
+    private String descricao;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("produtos")
+    private Categoria categoria;
 
-	public Integer getQuantidade() {
-		return quantidade;
-	}
+    @ManyToOne
+    @JsonIgnoreProperties("produtos")
+    private Usuario usuario;
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
+    @OneToMany(mappedBy = "produto")
+    @JsonIgnoreProperties("produto")
+    private Set<ImagemProduto> imagens;
 
-	public BigDecimal getPreco() {
-		return preco;
-	}
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
 
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getImage() {
-		return image;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getDescricao() {
-		return descricao;
-	}
+    public Integer getQuantidade() {
+        return quantidade;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
 
-	public Categoria getCategoria() {
-		return categoria;
-	}
+    public BigDecimal getPreco() {
+        return preco;
+    }
 
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-	
-	
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Set<ImagemProduto> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(Set<ImagemProduto> imagens) {
+        this.imagens = imagens;
+    }
 }

@@ -1,7 +1,6 @@
 package com.generation.joana.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,11 +19,12 @@ public class ImagemProduto {
     private String url;
 
     @ManyToOne
-    @JsonIgnoreProperties("imagem")
+    @JsonIgnoreProperties("imagens")
     private Produto produto;
 
+    // Getters e Setters
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -32,10 +32,18 @@ public class ImagemProduto {
     }
 
     public String getUrl() {
-        return this.url;
+        return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

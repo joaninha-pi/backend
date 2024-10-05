@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true) // Habilita a anotação @PreAuthorize
 public class BasicSecurityConfig {
 
     @Autowired
@@ -28,7 +30,6 @@ public class BasicSecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-
         return new UserDetailsServiceImpl();
     }
 
@@ -46,35 +47,38 @@ public class BasicSecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .sessionManagement(management -> management
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf(csrf -> csrf.disable())
+            .cors(withDefaults());
 
-    	http
-	        .sessionManagement(management -> management
-	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	        		.csrf(csrf -> csrf.disable())
-	        		.cors(withDefaults());
+        http
+            .authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/usuarios/logar").permitAll()
+                .requestMatchers("/usuarios/cadastrar").permitAll()
+                .requestMatchers("/error/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers(HttpMethod.GET, "/produtos/**").permitAll() // Comprador pode ver produtos
+                .requestMatchers(HttpMethod.GET, "/categorias/**").permitAll() // Comprador pode ver categorias
+                .requestMatchers(HttpMethod.POST, "/produtos").hasRole("VENDEDOR") // Somente vendedor pode criar produtos
+                .requestMatchers(HttpMethod.PUT, "/produtos/**").hasRole("VENDEDOR") // Somente vendedor pode atualizar produtos
+                .requestMatchers(HttpMethod.DELETE, "/produtos/**").hasRole("VENDEDOR") // Somente vendedor pode deletar produtos
+                .requestMatchers(HttpMethod.POST, "/categorias").hasRole("ADMIN") // Somente admin pode criar categorias
+                .requestMatchers(HttpMethod.PUT, "/categorias/**").hasRole("ADMIN") // Somente admin pode atualizar categorias
+                .requestMatchers(HttpMethod.DELETE, "/categorias/**").hasRole("ADMIN") // Somente admin pode deletar categorias
+                .requestMatchers("/admin/**").hasRole("ADMIN") // Acesso restrito a admin
+                .anyRequest().authenticated()) // Qualquer outra requisição requer autenticação
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+            .httpBasic(withDefaults());
 
-    	http
-	        .authorizeHttpRequests((auth) -> auth
-	                .requestMatchers("/usuarios/logar").permitAll()
-	                .requestMatchers("/usuarios/cadastrar").permitAll()
-	                .requestMatchers("/error/**").permitAll()
-	                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-	                .requestMatchers(HttpMethod.GET, "/produtos/**").permitAll()
-	                .requestMatchers(HttpMethod.GET, "/categorias/**").permitAll()
-	                .anyRequest().authenticated())
-	        .authenticationProvider(authenticationProvider())
-	        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-	        .httpBasic(withDefaults());
-
-		return http.build();
-
+        return http.build();
     }
-
 }
