@@ -30,6 +30,9 @@ public class Produto {
 	@NotNull(message = "O atributo quantidade é obrigatorio")
 	private Integer quantidade;
 	
+	@NotNull(message = "O pesso não pode ser nulo")
+	private Integer peso;
+	
 	@Digits(integer= 8, fraction= 2)
 	@NotNull(message = "O atributo preço é obrigatorio")
 	private BigDecimal preco;
