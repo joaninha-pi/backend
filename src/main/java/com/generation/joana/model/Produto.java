@@ -30,8 +30,6 @@ public class Produto {
 	@NotNull(message = "O atributo quantidade é obrigatorio")
 	private Integer quantidade;
 	
-	@NotNull(message = "O pesso não pode ser nulo")
-	private BigDecimal peso;
 	
 	@Digits(integer= 8, fraction= 2)
 	@NotNull(message = "O atributo preço é obrigatorio")
@@ -114,14 +112,5 @@ public class Produto {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
-	public BigDecimal getPeso() {
-		return peso;
-	}
-
-	public void setPeso(BigDecimal peso) {
-		this.peso = peso;
-	}
-	
 	
 }
